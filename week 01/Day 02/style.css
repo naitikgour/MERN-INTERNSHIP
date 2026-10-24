@@ -1,0 +1,87 @@
+* {
+    padding: 0%;
+    margin: 0;
+
+}
+
+.basics {
+    background-color: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    height: 50px;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+    font-size: 25px;
+}
+
+img {
+    height: 200px;
+    width: 200px;
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 20px;
+}
+
+.detail {
+    display: flex;
+    justify-content: flex-start;
+}
+
+#name {
+    padding-top: 20px;
+    padding-left: 20px;
+}
+
+.IMG {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.info {
+    padding-left: 20px;
+    line-height: 32px;
+    font-size: 20px;
+
+
+    align-items: center;
+    padding-right: 20px;
+
+}
+
+.formm {
+    padding: 20px;
+    padding-left: 20px;
+    font-size: 25px;
+}
+
+.button {
+    padding: 10px;
+    background-color: rgb(14, 206, 14);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-left: 12px;
+    height: 50px;
+    width: 200px;
+    font-size: 25px;
+}
+
+.hobbies {
+    padding-left: 40px;
+}
+
+.skills {
+    padding-left: 40px;
+}
+
+.bodyy {
+    background-color: azure;
+}

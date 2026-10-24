@@ -1,0 +1,132 @@
+header {
+    margin: 35px;
+}
+
+body {
+    background-color: #232c35;
+    padding: 0;
+    margin: 0;
+    font-size: 1.2rem;
+    font-family: "Segoe UI", Candara, "Bitstream Vera Sans", "DejaVu Sans", "Trebuchet MS", Verdana, sans-serif;
+    letter-spacing: 0.5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: rgb(14, 14, 15);
+}
+
+.controler {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+#fontLabel {
+    font-size: 1.5rem;
+    color: #f5f7f9;
+    font-weight: bold;
+    padding-right: 2px;
+    margin-left: 5px;
+}
+
+#fontSelect {
+    font-size: 1rem;
+    padding: 6px;
+    padding-bottom: 7px;
+    padding-right: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin: 10px;
+    outline: none;
+    height: 36px;
+}
+
+#fontSelect:focus {
+    border-color: #007bff;
+}
+
+button {
+    font-size: 1rem;
+    padding: 6px 12px;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    outline: none;
+    height: 36px;
+    border: none;
+}
+
+#boldBtn {
+    font-weight: bold;
+}
+
+#italicBtn {
+    font-style: italic;
+}
+
+#underlineBtn {
+    text-decoration: underline;
+}
+
+#font-increase:hover,
+#font-decrease:hover {
+    background-color: #577ca1;
+    color: #fff
+}
+
+#redbtn,
+#greenbtn,
+#bluebtn {
+    background-color: rgba(168, 26, 26, 0.87);
+    color: white;
+    font-size: 1rem;
+    padding: 6px 12px;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    outline: none;
+    height: 36px;
+}
+
+#greenbtn {
+    background-color: rgb(4, 71, 4);
+}
+
+#bluebtn {
+    background-color: rgb(2, 2, 114);
+}
+
+#resetBtn {
+    font-weight: bold;
+    background-color: #577ca1;
+    color: white;
+}
+
+#applybtn:hover,
+#resetBtn:hover {
+    background-color: #132231;
+}
+
+.btn-active {
+    background-color: #132231 !important;
+    color: white !important;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    margin: 5px 15px;
+    padding: 20px;
+    background-color: #eeedeaeb;
+    height: auto;
+    border-radius: 30px;
+}
+
+main {
+    margin-top: 25px;
+}

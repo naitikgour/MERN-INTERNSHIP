@@ -1,0 +1,35 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.NAVBAR {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    text-align: justify;
+    background-color: maroon;
+    color: white;
+    padding-left: 20px;
+}
+
+h3 {
+    padding-top: 20px;
+    padding-left: 20PX;
+}
+
+IMG {
+    height: 200px;
+    width: 200px;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+.gallery {}
+
+@media (min-width: 480PX) {
+    .struc {
+        flex-direction: row;
+
+    }
+}
