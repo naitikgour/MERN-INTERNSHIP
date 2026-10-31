@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 3 - Day 2: Mini Challenge</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body style="font-family: Arial, sans-serif; padding: 20px;">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    function ProfileCard(props) {
+      const cardStyle = {
+        border: "1px solid #ddd",
+        borderRadius: "10px",
+        padding: "15px",
+        width: "220px",
+        textAlign: "center",
+        margin: "10px",
+        boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+      };
+
+      return (
+        <div style={cardStyle}>
+          <img
+            src={props.image}
+            alt={props.name}
+            style={{ width: "80px", borderRadius: "50%" }}
+          />
+          <h3>{props.name}</h3>
+          <p>{props.role}</p>
+        </div>
+      );
+    }
+
+    function App() {
+      const users = [
+        {
+          id: 1,
+          name: "Arjun Kumar",
+          role: "Frontend Developer",
+          image: "https://randomuser.me/api/portraits/men/32.jpg"
+        },
+        {
+          id: 2,
+          name: "Sneha Verma",
+          role: "UI/UX Designer",
+          image: "https://randomuser.me/api/portraits/women/44.jpg"
+        },
+        {
+          id: 3,
+          name: "Rohan Sharma",
+          role: "Full Stack Engineer",
+          image: "https://randomuser.me/api/portraits/men/45.jpg"
+        }
+      ];
+
+      return (
+        <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "10px" }}>
+          {users.map((user) => (
+            <ProfileCard
+              key={user.id}
+              name={user.name}
+              role={user.role}
+              image={user.image}
+            />
+          ))}
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>

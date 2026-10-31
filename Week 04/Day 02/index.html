@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 4 - Day 2: Context API Theme Toggle</title>
+  <link rel="stylesheet" href="src/App.css">
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body style="margin: 0; padding: 0;">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { createContext, useContext, useState } = React;
+
+    const ThemeContext = createContext(null);
+
+    function Navbar() {
+      const { theme, setTheme } = useContext(ThemeContext);
+
+      return (
+        <nav className={`navbar ${theme}`}>
+          <h2>My Website</h2>
+          <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
+            {theme === "light" ? "Dark Mode" : "Light Mode"}
+          </button>
+        </nav>
+      );
+    }
+
+    function Home() {
+      const { theme } = useContext(ThemeContext);
+      return (
+        <div style={{ padding: "40px 20px", maxWidth: "600px", margin: "0 auto", textAlign: "center" }}>
+          <h2>Context API Theme Demo</h2>
+          <p>
+            Current active theme: <strong>{theme.toUpperCase()}</strong>
+          </p>
+          <p>
+            The theme state is provided globally at the root component via <code>ThemeContext.Provider</code> and consumed cleanly by child components using the <code>useContext()</code> hook.
+          </p>
+        </div>
+      );
+    }
+
+    function App() {
+      const [theme, setTheme] = useState("light");
+
+      return (
+        <ThemeContext.Provider value={{ theme, setTheme }}>
+          <div className={`app ${theme}`}>
+            <Navbar />
+            <Home />
+          </div>
+        </ThemeContext.Provider>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>

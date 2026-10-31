@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 5 - Day 1: Introduction to Node.js</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 30px;
+      background-color: #f8fafc;
+      color: #1e293b;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .header {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: white;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    .header h1 { margin: 0 0 8px; font-size: 26px; }
+    .header p { margin: 0; opacity: 0.9; }
+    .task-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    .task-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: #e0f2fe;
+      color: #0284c7;
+    }
+    pre {
+      background: #0f172a;
+      color: #38bdf8;
+      padding: 14px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 14px;
+    }
+    .terminal-output {
+      background: #1e1e1e;
+      color: #4ade80;
+      padding: 14px;
+      border-radius: 8px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px;
+      margin-top: 10px;
+      white-space: pre-wrap;
+    }
+    .btn {
+      background: #0284c7;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+    .btn:hover { background: #0369a1; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Week 5 — Day 1: Introduction to Node.js</h1>
+      <p>MERN Full Stack Internship | Core Modules (fs, os, path), Event Loop & CLI Scripts</p>
+    </div>
+
+    <!-- Task 1 -->
+    <div class="task-card">
+      <div class="task-title">
+        <span class="badge">Task 1</span> Hello World Node Script (hello.js)
+      </div>
+      <p>Run via terminal: <code>node hello.js</code></p>
+      <pre>console.log("Hello World from Node.js!");</pre>
+      <button class="btn" onclick="runTask1()">Simulate Run</button>
+      <div id="output1" class="terminal-output" style="display:none;"></div>
+    </div>
+
+    <!-- Task 2 -->
+    <div class="task-card">
+      <div class="task-title">
+        <span class="badge">Task 2</span> File System Module (fs.writeFile & fs.readFile)
+      </div>
+      <p>Asynchronously writes to <code>student.txt</code> then reads the content back.</p>
+      <pre>const fs = require("fs");
+fs.writeFile("student.txt", "Welcome to Node.js!", (err) => {
+  if (err) throw err;
+  fs.readFile("student.txt", "utf8", (err, data) => {
+    console.log("File content:", data);
+  });
+});</pre>
+      <button class="btn" onclick="runTask2()">Simulate Run</button>
+      <div id="output2" class="terminal-output" style="display:none;"></div>
+    </div>
+
+    <!-- Task 3 -->
+    <div class="task-card">
+      <div class="task-title">
+        <span class="badge">Task 3</span> System Information Logger (system-info.js)
+      </div>
+      <p>Inspects host machine resources using the built-in <code>os</code> module.</p>
+      <pre>const os = require("os");
+console.log("Operating System:", os.platform());
+console.log("Architecture:", os.arch());
+console.log("Total Memory:", os.totalmem());
+console.log("Free Memory:", os.freemem());
+console.log("CPU Info:", os.cpus());</pre>
+      <button class="btn" onclick="runTask3()">Simulate Run</button>
+      <div id="output3" class="terminal-output" style="display:none;"></div>
+    </div>
+  </div>
+
+  <script>
+    function runTask1() {
+      const el = document.getElementById("output1");
+      el.style.display = "block";
+      el.textContent = "$ node Task 1/hello.js\nHello World from Node.js!";
+    }
+    function runTask2() {
+      const el = document.getElementById("output2");
+      el.style.display = "block";
+      el.textContent = "$ node Task 2/fileOperations.js\nFile written successfully!\nFile content: Welcome to Node.js!";
+    }
+    function runTask3() {
+      const el = document.getElementById("output3");
+      el.style.display = "block";
+      el.textContent = "$ node Task 3/system-info.js\n=== System Information ===\nOperating System: win32\nArchitecture: x64\nTotal Memory: 6349565952 bytes (5.91 GB)\nFree Memory: 639692800 bytes (0.60 GB)\nCPU Info: 8 cores detected (AMD Ryzen 5)";
+    }
+  </script>
+</body>
+</html>

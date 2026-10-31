@@ -1,0 +1,25 @@
+{
+  "name": "week-5-day-3-express-intro",
+  "version": "1.0.0",
+  "description": "Week 5 Day 3: Getting Started with Express.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "node test-api.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "keywords": [
+    "express",
+    "rest",
+    "api",
+    "routing"
+  ],
+  "author": "Intern",
+  "license": "ISC"
+}

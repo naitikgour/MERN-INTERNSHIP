@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 4 - Day 6-7: Responsive Dashboard Interface</title>
+  <!-- Tailwind CSS CDN configured for dark mode class -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 antialiased">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, createContext, useContext } = React;
+
+    // Theme Context
+    const ThemeContext = createContext();
+
+    function ThemeProvider({ children }) {
+      const [dark, setDark] = useState(false);
+      const toggleTheme = () => setDark(!dark);
+
+      return (
+        <ThemeContext.Provider value={{ dark, toggleTheme }}>
+          <div className={dark ? "dark" : ""}>
+            {children}
+          </div>
+        </ThemeContext.Provider>
+      );
+    }
+
+    function useTheme() {
+      return useContext(ThemeContext);
+    }
+
+    // Components
+    function Card({ title, value, change }) {
+      return (
+        <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:scale-105 transition transform duration-200">
+          <h2 className="text-gray-500 dark:text-gray-400 text-sm font-medium">{title}</h2>
+          <p className="text-3xl font-bold mt-2 text-gray-900 dark:text-white">{value}</p>
+          {change && (
+            <span className="inline-block mt-2 text-xs font-semibold text-green-600 dark:text-green-400">
+              {change}
+            </span>
+          )}
+        </div>
+      );
+    }
+
+    function Sidebar({ currentTab, setTab, isOpen, onClose }) {
+      const links = [
+        { id: "dashboard", label: "Dashboard" },
+        { id: "users", label: "Users" },
+        { id: "reports", label: "Reports" },
+        { id: "settings", label: "Settings" }
+      ];
+
+      return (
+        <>
+          {isOpen && (
+            <div className="fixed inset-0 bg-black/50 z-20 md:hidden" onClick={onClose} />
+          )}
+
+          <aside className={`fixed md:static inset-y-0 left-0 z-30 w-64 bg-gray-900 text-white p-6 transform transition-transform duration-200 ease-in-out ${
+            isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+          }`}>
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-bold text-white tracking-tight">Admin Panel</h2>
+              <button className="md:hidden text-gray-400 hover:text-white" onClick={onClose}>✕</button>
+            </div>
+
+            <nav className="flex flex-col gap-2">
+              {links.map((link) => (
+                <button
+                  key={link.id}
+                  onClick={() => { setTab(link.id); onClose(); }}
+                  className={`flex items-center w-full px-4 py-3 rounded-lg text-sm font-medium transition text-left cursor-pointer ${
+                    currentTab === link.id
+                      ? "bg-blue-600 text-white"
+                      : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                  }`}
+                >
+                  {link.label}
+                </button>
+              ))}
+            </nav>
+          </aside>
+        </>
+      );
+    }
+
+    function Navbar({ onToggleSidebar }) {
+      const { dark, toggleTheme } = useTheme();
+
+      return (
+        <header className="flex justify-between items-center px-6 py-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 transition">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={onToggleSidebar}
+              className="md:hidden text-gray-700 dark:text-gray-200 text-2xl focus:outline-none cursor-pointer"
+            >
+              ☰
+            </button>
+            <h1 className="text-xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
+          </div>
+
+          <button
+            onClick={toggleTheme}
+            className="px-4 py-2 text-sm font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition cursor-pointer"
+          >
+            {dark ? "Light Mode" : "Dark Mode"}
+          </button>
+        </header>
+      );
+    }
+
+    // Pages
+    function DashboardPage() {
+      const stats = [
+        { title: "Total Users", value: "1,250", change: "+12% this month" },
+        { title: "Orders Today", value: "78", change: "+5% vs yesterday" },
+        { title: "Revenue", value: "$8,900", change: "+18% growth" },
+        { title: "Pending Reports", value: "14", change: "Requires review" },
+      ];
+
+      const chartData = [
+        { month: "Jan", height: "60%" },
+        { month: "Feb", height: "80%" },
+        { month: "Mar", height: "45%" },
+        { month: "Apr", height: "90%" },
+        { month: "May", height: "70%" },
+        { month: "Jun", height: "100%" },
+      ];
+
+      return (
+        <div className="space-y-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Analytics Overview</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Welcome back! Here is what's happening today.</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {stats.map((s, i) => (
+              <Card key={i} title={s.title} value={s.value} change={s.change} />
+            ))}
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Monthly Revenue Trends</h3>
+            <div className="h-48 flex items-end justify-between gap-4 pt-6 px-4 border-b border-gray-200 dark:border-gray-700">
+              {chartData.map((d, i) => (
+                <div key={i} className="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+                  <div
+                    className="w-full max-w-[40px] bg-blue-500 hover:bg-blue-600 rounded-t transition-all duration-300"
+                    style={{ height: d.height }}
+                  />
+                  <span className="text-xs text-gray-500 dark:text-gray-400">{d.month}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function UsersPage() {
+      const [searchTerm, setSearchTerm] = useState("");
+
+      const users = [
+        { id: 1, name: "Naitik Gour", email: "naitik@example.com", role: "Administrator", status: "Active" },
+        { id: 2, name: "Aman Verma", email: "aman@example.com", role: "Developer", status: "Active" },
+        { id: 3, name: "Sneha Roy", email: "sneha@example.com", role: "Product Manager", status: "Active" },
+        { id: 4, name: "Riya Sharma", email: "riya@example.com", role: "UI Designer", status: "Inactive" },
+      ];
+
+      const filtered = users.filter(u =>
+        u.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        u.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        u.role.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      return (
+        <div className="space-y-6">
+          <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Users Management</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400">View and manage registered system accounts.</p>
+            </div>
+            <input
+              type="text"
+              placeholder="Search user by name, email..."
+              className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-x-auto">
+            <table className="w-full text-left text-sm text-gray-700 dark:text-gray-300">
+              <thead className="bg-gray-50 dark:bg-gray-700/50 text-xs uppercase text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
+                <tr>
+                  <th className="px-6 py-3">User</th>
+                  <th className="px-6 py-3">Role</th>
+                  <th className="px-6 py-3">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+                {filtered.map(u => (
+                  <tr key={u.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/40">
+                    <td className="px-6 py-4">
+                      <div className="font-semibold text-gray-900 dark:text-white">{u.name}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">{u.email}</div>
+                    </td>
+                    <td className="px-6 py-4">{u.role}</td>
+                    <td className="px-6 py-4">
+                      <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
+                        u.status === "Active"
+                          ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                          : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
+                      }`}>
+                        {u.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    }
+
+    function ReportsPage() {
+      const reports = [
+        { title: "Weekly User Acquisition", date: "Oct 28, 2025", type: "PDF", status: "Generated" },
+        { title: "Monthly Sales & Revenue", date: "Oct 25, 2025", type: "CSV", status: "Ready" },
+        { title: "Server Performance Audit", date: "Oct 20, 2025", type: "LOG", status: "Archived" }
+      ];
+
+      return (
+        <div className="space-y-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Reports Overview</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Download and inspect scheduled analytics reports.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {reports.map((r, i) => (
+              <div key={i} className="p-5 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <span className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">{r.type} Report</span>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mt-2">{r.title}</h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Generated: {r.date}</p>
+                <div className="mt-4 flex justify-between items-center">
+                  <span className="text-xs font-semibold px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 rounded">
+                    {r.status}
+                  </span>
+                  <button className="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline">Download</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    function SettingsPage() {
+      const [notifications, setNotifications] = useState(true);
+      const [autoSave, setAutoSave] = useState(false);
+
+      return (
+        <div className="space-y-6 max-w-2xl">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Application Settings</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Configure global preferences and notifications.</p>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 space-y-4">
+            <div className="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-700">
+              <div>
+                <h4 className="font-semibold text-gray-900 dark:text-white">Email Notifications</h4>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Receive weekly digests and security alerts.</p>
+              </div>
+              <button
+                onClick={() => setNotifications(!notifications)}
+                className={`w-12 h-6 flex items-center rounded-full p-1 transition duration-300 cursor-pointer ${
+                  notifications ? "bg-blue-600 justify-end" : "bg-gray-300 dark:bg-gray-600 justify-start"
+                }`}
+              >
+                <div className="bg-white w-4 h-4 rounded-full shadow-md" />
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-semibold text-gray-900 dark:text-white">Auto Save Drafts</h4>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Automatically save modified data locally.</p>
+              </div>
+              <button
+                onClick={() => setAutoSave(!autoSave)}
+                className={`w-12 h-6 flex items-center rounded-full p-1 transition duration-300 cursor-pointer ${
+                  autoSave ? "bg-blue-600 justify-end" : "bg-gray-300 dark:bg-gray-600 justify-start"
+                }`}
+              >
+                <div className="bg-white w-4 h-4 rounded-full shadow-md" />
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function MainDashboardApp() {
+      const [tab, setTab] = useState("dashboard");
+      const [sidebarOpen, setSidebarOpen] = useState(false);
+
+      return (
+        <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 transition">
+          <Sidebar currentTab={tab} setTab={setTab} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+          <div className="flex-1 flex flex-col min-w-0">
+            <Navbar onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+
+            <main className="flex-1 p-6 text-gray-800 dark:text-gray-200 overflow-y-auto">
+              {tab === "dashboard" && <DashboardPage />}
+              {tab === "users" && <UsersPage />}
+              {tab === "reports" && <ReportsPage />}
+              {tab === "settings" && <SettingsPage />}
+            </main>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      return (
+        <ThemeProvider>
+          <MainDashboardApp />
+        </ThemeProvider>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>

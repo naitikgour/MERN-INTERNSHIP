@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 3 - Day 3: Task 2 - User Form Live Preview</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body style="font-family: Arial, sans-serif; padding: 20px;">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function UserForm() {
+      const [name, setName] = useState("");
+      const [email, setEmail] = useState("");
+
+      return (
+        <div style={{ maxWidth: "400px", margin: "20px auto", padding: "20px", border: "1px solid #ccc", borderRadius: "8px" }}>
+          <h2>Registration Form</h2>
+          <div style={{ marginBottom: "10px" }}>
+            <input
+              type="text"
+              placeholder="Enter Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
+            />
+          </div>
+          <div style={{ marginBottom: "10px" }}>
+            <input
+              type="email"
+              placeholder="Enter Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
+            />
+          </div>
+          <h3>Live Preview:</h3>
+          <p><strong>Name:</strong> {name}</p>
+          <p><strong>Email:</strong> {email}</p>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<UserForm />);
+  </script>
+</body>
+</html>

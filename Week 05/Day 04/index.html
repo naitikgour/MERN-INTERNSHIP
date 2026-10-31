@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 5 - Day 4: User REST CRUD & Middleware</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 30px;
+      background-color: #f8fafc;
+      color: #1e293b;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+    .header {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: white;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    .header h1 { margin: 0 0 8px; font-size: 26px; }
+    .header p { margin: 0; opacity: 0.9; }
+    .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .panel {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+    }
+    .btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      color: white;
+    }
+    .btn-primary { background: #7c3aed; }
+    .btn-primary:hover { background: #6d28d9; }
+    .btn-danger { background: #ef4444; }
+    .btn-danger:hover { background: #dc2626; }
+    .user-list { list-style: none; padding: 0; margin: 0; }
+    .user-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .user-item:last-child { border-bottom: none; }
+    .terminal {
+      background: #0f172a;
+      color: #c084fc;
+      padding: 14px;
+      border-radius: 8px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px;
+      margin-top: 15px;
+      min-height: 80px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Week 5 — Day 4: Middleware, REST API & Error Handling</h1>
+      <p>Modular Architecture: server.js, routes/, controllers/, middleware/ & HTTP Status Codes</p>
+    </div>
+
+    <div class="layout">
+      <!-- Create User -->
+      <div class="panel">
+        <h3>Add New User (POST /users)</h3>
+        <div class="form-group">
+          <label>User Name</label>
+          <input type="text" id="userName" placeholder="e.g. Aman">
+        </div>
+        <div class="form-group">
+          <label>Age</label>
+          <input type="number" id="userAge" placeholder="e.g. 22">
+        </div>
+        <button class="btn btn-primary" onclick="addUser()">Create User (201)</button>
+
+        <h3 style="margin-top: 24px;">Trigger Error Handling Middleware</h3>
+        <p style="font-size: 13px; color: #64748b;">Tests 4-parameter error handler returning HTTP 500</p>
+        <button class="btn btn-danger" onclick="triggerError()">Trigger Error (500)</button>
+      </div>
+
+      <!-- User List -->
+      <div class="panel">
+        <h3>User Management (GET /users)</h3>
+        <ul id="userList" class="user-list"></ul>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top: 20px;">
+      <h3>Logger & API Console Output</h3>
+      <div id="logs" class="terminal">[System] Initialized Day 4 User API Console.</div>
+    </div>
+  </div>
+
+  <script>
+    let localUsers = [
+      { id: 1, name: "Aman", age: 22 },
+      { id: 2, name: "Sara", age: 25 }
+    ];
+
+    function log(msg) {
+      const el = document.getElementById("logs");
+      el.textContent += "\n" + msg;
+      el.scrollTop = el.scrollHeight;
+    }
+
+    function renderUsers() {
+      const list = document.getElementById("userList");
+      list.innerHTML = "";
+      localUsers.forEach(u => {
+        const li = document.createElement("li");
+        li.className = "user-item";
+        li.innerHTML = `
+          <div><strong>#${u.id} ${u.name}</strong> (${u.age} years old)</div>
+          <button class="btn btn-danger" style="padding: 4px 8px; font-size: 12px;" onclick="deleteUser(${u.id})">Delete (200)</button>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    function addUser() {
+      const name = document.getElementById("userName").value.trim();
+      const age = parseInt(document.getElementById("userAge").value);
+      if (!name || isNaN(age)) {
+        log(`[${new Date().toISOString()}] POST /users 400 Bad Request - Name and age are required`);
+        alert("Validation error: Name and age are required!");
+        return;
+      }
+      const newUser = { id: localUsers.length ? Math.max(...localUsers.map(u => u.id)) + 1 : 1, name, age };
+      localUsers.push(newUser);
+      document.getElementById("userName").value = "";
+      document.getElementById("userAge").value = "";
+      renderUsers();
+      log(`[${new Date().toISOString()}] POST /users 201 Created: ${JSON.stringify(newUser)}`);
+    }
+
+    function deleteUser(id) {
+      localUsers = localUsers.filter(u => u.id !== id);
+      renderUsers();
+      log(`[${new Date().toISOString()}] DELETE /users/${id} 200 OK: {"message":"User deleted"}`);
+    }
+
+    function triggerError() {
+      log(`[${new Date().toISOString()}] GET /trigger-error -> [Error: Simulated backend crash]`);
+      log(`[Error Middleware] 500 Internal Server Error returned.`);
+    }
+
+    renderUsers();
+  </script>
+</body>
+</html>

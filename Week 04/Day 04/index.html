@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 4 - Day 4: Advanced Tailwind & Component Design</title>
+  <!-- Tailwind CSS CDN with config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            edunami: {
+              primary: '#4B7BEC',
+              secondary: '#A55EEA',
+              accent: '#20BF6B',
+              bg: '#F4F6F7',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-8">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    function InteractiveCard() {
+      return (
+        <div className="max-w-sm p-6 bg-white rounded-xl shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-300 border border-gray-100">
+          <h3 className="text-xl font-semibold text-gray-800">React Training</h3>
+          <p className="text-gray-600 mt-2 text-sm leading-relaxed">
+            Learn React with hands-on examples and real projects.
+          </p>
+          <input
+            placeholder="Enter your email"
+            className="mt-4 border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition w-full text-sm"
+          />
+          <button className="mt-4 w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 active:scale-95 transition-all duration-200 font-medium">
+            Read More
+          </button>
+        </div>
+      );
+    }
+
+    function CustomThemeDemo() {
+      return (
+        <div className="bg-edunami-bg p-6 rounded-2xl shadow-sm border border-gray-200 max-w-md">
+          <h2 className="text-edunami-primary text-2xl font-bold mb-3">Custom Theme Palette</h2>
+          <p className="text-gray-700 mb-4 text-sm leading-relaxed">
+            Extended theme colors using Tailwind configuration: Primary, Secondary, and Accent.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <button className="bg-edunami-primary text-white px-4 py-2 rounded-lg hover:opacity-90 transition font-medium text-sm">
+              Explore
+            </button>
+            <button className="bg-edunami-secondary text-white px-4 py-2 rounded-lg hover:opacity-90 transition font-medium text-sm">
+              Secondary
+            </button>
+            <button className="bg-edunami-accent text-white px-4 py-2 rounded-lg hover:opacity-90 transition font-medium text-sm">
+              Accent
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      return (
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">Advanced Tailwind CSS & Components</h1>
+          <div className="flex flex-col md:flex-row gap-8 items-start">
+            <InteractiveCard />
+            <CustomThemeDemo />
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>

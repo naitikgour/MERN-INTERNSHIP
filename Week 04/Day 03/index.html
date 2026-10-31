@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 4 - Day 3: Tailwind CSS Integration</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function ResponsiveNavbar() {
+      const [isOpen, setIsOpen] = useState(false);
+
+      return (
+        <nav className="bg-gray-900 text-white p-4">
+          <div className="flex items-center justify-between max-w-6xl mx-auto">
+            <h1 className="text-xl font-bold">MySite</h1>
+            <ul className="hidden md:flex gap-6">
+              <li className="hover:text-blue-400 cursor-pointer">Home</li>
+              <li className="hover:text-blue-400 cursor-pointer">About</li>
+              <li className="hover:text-blue-400 cursor-pointer">Contact</li>
+            </ul>
+            <button
+              className="md:hidden text-2xl focus:outline-none"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? "✕" : "☰"}
+            </button>
+          </div>
+
+          {isOpen && (
+            <ul className="md:hidden flex flex-col gap-3 mt-4 pt-4 border-t border-gray-700">
+              <li className="hover:text-blue-400 cursor-pointer">Home</li>
+              <li className="hover:text-blue-400 cursor-pointer">About</li>
+              <li className="hover:text-blue-400 cursor-pointer">Contact</li>
+            </ul>
+          )}
+        </nav>
+      );
+    }
+
+    function ButtonCard() {
+      return (
+        <div className="p-6 bg-white rounded-xl shadow-md max-w-sm mb-6 border border-gray-100">
+          <h3 className="text-xl font-bold text-gray-800">Tailwind Component</h3>
+          <p className="text-gray-600 my-2 text-sm">Converted from regular CSS to modern utility-first Tailwind classes.</p>
+          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+            Click Me
+          </button>
+        </div>
+      );
+    }
+
+    function CardLayout() {
+      const cards = [
+        { id: 1, title: "Web Development", desc: "Build scalable web applications using React and Node.js." },
+        { id: 2, title: "UI/UX Design", desc: "Craft intuitive, user-friendly experiences with modern interfaces." },
+        { id: 3, title: "Cloud & DevOps", desc: "Deploy and manage reliable cloud infrastructure with CI/CD." },
+        { id: 4, title: "Mobile Apps", desc: "Develop native cross-platform mobile apps using React Native." }
+      ];
+
+      return (
+        <div>
+          <h2 className="text-2xl font-bold mb-4 text-gray-800">Our Services (Grid Layout)</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            {cards.map((c) => (
+              <div
+                key={c.id}
+                className="p-5 shadow-lg rounded-xl bg-white border border-gray-100 hover:scale-105 transition transform duration-200"
+              >
+                <h3 className="text-lg font-semibold text-gray-900">{c.title}</h3>
+                <p className="text-gray-600 mt-2 text-sm">{c.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      return (
+        <div>
+          <ResponsiveNavbar />
+          <div className="max-w-6xl mx-auto p-6">
+            <h1 className="text-2xl font-bold mb-6 text-gray-900">Tailwind CSS Hands-on Tasks</h1>
+            <ButtonCard />
+            <CardLayout />
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>

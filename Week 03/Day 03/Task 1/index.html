@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 3 - Day 3: Task 1 - Counter App</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body style="font-family: Arial, sans-serif; text-align: center; padding: 40px;">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function CounterApp() {
+      const [count, setCount] = useState(0);
+
+      return (
+        <div style={{ textAlign: "center" }}>
+          <h1>Counter: {count}</h1>
+          <button onClick={() => setCount(count + 1)} style={{ margin: "5px", padding: "8px 16px", fontSize: "16px" }}>+</button>
+          <button onClick={() => setCount(count - 1)} style={{ margin: "5px", padding: "8px 16px", fontSize: "16px" }}>-</button>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<CounterApp />);
+  </script>
+</body>
+</html>

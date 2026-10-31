@@ -1,0 +1,22 @@
+{
+  "name": "week-5-day-2-npm-modular",
+  "version": "1.0.0",
+  "description": "Week 5 Day 2: npm & Modular Programming Tasks",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "keywords": [
+    "nodejs",
+    "npm",
+    "modules",
+    "commonjs",
+    "nodemon"
+  ],
+  "author": "Intern",
+  "license": "ISC"
+}

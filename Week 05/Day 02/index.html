@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 5 - Day 2: npm & Modular Programming</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 30px;
+      background-color: #f8fafc;
+      color: #1e293b;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .header {
+      background: linear-gradient(135deg, #059669, #047857);
+      color: white;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    .header h1 { margin: 0 0 8px; font-size: 26px; }
+    .header p { margin: 0; opacity: 0.9; }
+    .task-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: #d1fae5;
+      color: #059669;
+    }
+    pre {
+      background: #0f172a;
+      color: #34d399;
+      padding: 14px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 14px;
+    }
+    .calculator {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    input, select, button {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      font-size: 14px;
+    }
+    button {
+      background: #059669;
+      color: white;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover { background: #047857; }
+    .result-box {
+      margin-top: 12px;
+      padding: 12px;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 6px;
+      font-weight: 600;
+      color: #065f46;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Week 5 — Day 2: npm & Modular Programming</h1>
+      <p>Node Package Manager, Semantic Versioning, Nodemon Auto-Reload & CommonJS Modules</p>
+    </div>
+
+    <div class="task-card">
+      <span class="badge">Tasks 1 & 2</span>
+      <h3>Project Initialization & Nodemon Configuration</h3>
+      <p>Configured in <code>package.json</code> with development scripts:</p>
+      <pre>{
+  "name": "week-5-day-2-npm-modular",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}</pre>
+    </div>
+
+    <div class="task-card">
+      <span class="badge">Task 3</span>
+      <h3>Modular Math Utility (math.js & app.js)</h3>
+      <p>Functions exported from <code>math.js</code>: <code>add</code>, <code>subtract</code>, <code>multiply</code>, <code>divide</code>.</p>
+      <div class="calculator">
+        <input type="number" id="numA" value="10" placeholder="Number A">
+        <select id="op">
+          <option value="add">+</option>
+          <option value="subtract">-</option>
+          <option value="multiply">×</option>
+          <option value="divide">÷</option>
+        </select>
+        <input type="number" id="numB" value="5" placeholder="Number B">
+        <button onclick="calculate()">Calculate via math.js</button>
+      </div>
+      <div id="resultBox" class="result-box">Result will appear here.</div>
+    </div>
+  </div>
+
+  <script>
+    const math = {
+      add: (a, b) => a + b,
+      subtract: (a, b) => a - b,
+      multiply: (a, b) => a * b,
+      divide: (a, b) => b === 0 ? "Cannot divide by zero" : a / b
+    };
+
+    function calculate() {
+      const a = parseFloat(document.getElementById("numA").value);
+      const b = parseFloat(document.getElementById("numB").value);
+      const op = document.getElementById("op").value;
+
+      if (isNaN(a) || isNaN(b)) {
+        document.getElementById("resultBox").textContent = "Please enter valid numbers!";
+        return;
+      }
+
+      const res = math[op](a, b);
+      document.getElementById("resultBox").textContent = `math.${op}(${a}, ${b}) = ${res}`;
+    }
+    calculate();
+  </script>
+</body>
+</html>

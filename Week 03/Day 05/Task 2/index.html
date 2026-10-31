@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 3 - Day 5: Task 2 - Conditional Welcome Message</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body style="font-family: Arial, sans-serif; padding: 20px;">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function LoginForm() {
+      const [username, setUsername] = useState("");
+      const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        if (username.trim() !== "") {
+          setIsLoggedIn(true);
+        }
+      };
+
+      const handleLogout = () => {
+        setIsLoggedIn(false);
+        setUsername("");
+      };
+
+      return (
+        <div style={{ maxWidth: "300px", margin: "20px auto", padding: "20px", border: "1px solid #ccc", borderRadius: "5px" }}>
+          {isLoggedIn ? (
+            <div>
+              <h2>Welcome, {username}!</h2>
+              <button onClick={handleLogout} style={{ padding: "8px 16px" }}>Logout</button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <h2>Login Form</h2>
+              <input
+                type="text"
+                placeholder="Enter username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                style={{ width: "100%", padding: "8px", boxSizing: "border-box" }}
+              />
+              <br /><br />
+              <button type="submit" style={{ padding: "8px 16px" }}>Login</button>
+            </form>
+          )}
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<LoginForm />);
+  </script>
+</body>
+</html>

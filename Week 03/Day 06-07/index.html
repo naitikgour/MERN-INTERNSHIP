@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 3 - Day 6-7: Mini Project - React Personal Blog UI</title>
+  <link rel="stylesheet" href="src/App.css">
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function Navbar() {
+      return (
+        <nav className="navbar">
+          <div className="nav-container">
+            <h2 className="nav-logo">My Personal Blog</h2>
+            <ul className="nav-links">
+              <li><a href="#home">Home</a></li>
+              <li><a href="#articles">Articles</a></li>
+              <li><a href="#about">About</a></li>
+            </ul>
+          </div>
+        </nav>
+      );
+    }
+
+    function BlogCard({ title, author, date, summary, content, category }) {
+      const [showDetails, setShowDetails] = useState(false);
+
+      return (
+        <div className="blog-card">
+          <span className="blog-category">{category}</span>
+          <h3 className="blog-title">{title}</h3>
+          <p className="blog-meta">By {author} | {date}</p>
+          <p className="blog-summary">{summary}</p>
+
+          {showDetails && (
+            <div className="blog-details">
+              <p>{content}</p>
+            </div>
+          )}
+
+          <button
+            className="read-more-btn"
+            onClick={() => setShowDetails(!showDetails)}
+          >
+            {showDetails ? "Read Less" : "Read More"}
+          </button>
+        </div>
+      );
+    }
+
+    function BlogList({ blogs }) {
+      if (blogs.length === 0) {
+        return <p className="no-blogs">No blog posts found matching your search.</p>;
+      }
+
+      return (
+        <div className="blog-list">
+          {blogs.map((blog) => (
+            <BlogCard
+              key={blog.id}
+              title={blog.title}
+              author={blog.author}
+              date={blog.date}
+              category={blog.category}
+              summary={blog.summary}
+              content={blog.content}
+            />
+          ))}
+        </div>
+      );
+    }
+
+    function Footer() {
+      return (
+        <footer className="footer">
+          <p>© 2025 Personal Blog | Built with React</p>
+        </footer>
+      );
+    }
+
+    const initialBlogs = [
+      {
+        id: 1,
+        title: "Getting Started with React",
+        author: "Naitik Gour",
+        date: "October 20, 2025",
+        category: "React",
+        summary: "A beginner-friendly guide to understanding React fundamentals and component architecture.",
+        content: "React is a powerful library for building interactive user interfaces. By breaking UIs into small reusable components, code becomes easier to maintain, test, and scale. We explored JSX, Virtual DOM, and props passing."
+      },
+      {
+        id: 2,
+        title: "Mastering React State with useState",
+        author: "Naitik Gour",
+        date: "October 22, 2025",
+        category: "Hooks",
+        summary: "Learn how the useState hook allows functional components to store dynamic data.",
+        content: "State enables components to remember user interactions such as button clicks, typed text, and toggles. When state changes, React re-renders only the necessary parts of the DOM efficiently."
+      },
+      {
+        id: 3,
+        title: "Handling Side Effects using useEffect",
+        author: "Naitik Gour",
+        date: "October 25, 2025",
+        category: "API & Lifecycle",
+        summary: "Understanding how to fetch API data and manage lifecycles in functional React.",
+        content: "Side effects like fetching REST APIs or setting timers are handled using useEffect. Dependency arrays allow fine-grained control over when the effect should run, preventing infinite re-rendering loops."
+      },
+      {
+        id: 4,
+        title: "Conditional Rendering & Event Handling",
+        author: "Naitik Gour",
+        date: "October 27, 2025",
+        category: "JavaScript",
+        summary: "Techniques for conditionally displaying UI elements and responding to user actions.",
+        content: "Using ternary operators and logical AND (&&) expressions lets you display different views seamlessly, such as showing welcome messages upon login or toggling expanded details."
+      }
+    ];
+
+    function App() {
+      const [blogs] = useState(initialBlogs);
+      const [searchTerm, setSearchTerm] = useState("");
+
+      const filteredBlogs = blogs.filter((blog) =>
+        blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        blog.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        blog.summary.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      return (
+        <div className="app-container">
+          <Navbar />
+
+          <main className="main-content">
+            <section className="search-section">
+              <h2>Latest Blog Posts</h2>
+              <input
+                type="text"
+                className="search-input"
+                placeholder="Search by title, category, or keyword..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </section>
+
+            <BlogList blogs={filteredBlogs} />
+          </main>
+
+          <Footer />
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>
