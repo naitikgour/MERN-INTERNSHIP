@@ -1,0 +1,16 @@
+{
+  "name": "week-6-day-3-mongoose-models",
+  "version": "1.0.0",
+  "description": "Mongoose Models, Schemas, Validation & Express CRUD Routes",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test-api.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.3.4"
+  }
+}
+

@@ -1,0 +1,17 @@
+{
+  "name": "student-management-api",
+  "version": "1.0.0",
+  "description": "Week 6 Day 6-7 Mini Project: Student Management REST API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test-student-api.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.3.4"
+  }
+}
+

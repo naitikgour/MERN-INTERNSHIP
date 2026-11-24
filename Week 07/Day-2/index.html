@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 7 - Day 2: User Registration & Password Hashing</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <header class="bg-gradient-to-r from-indigo-600 to-blue-700 text-white rounded-2xl p-8 mb-8 shadow-xl">
+      <span class="inline-block bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">
+        Week 7 • Day 2
+      </span>
+      <h1 class="text-3xl font-extrabold tracking-tight">User Registration & Bcrypt Hashing</h1>
+      <p class="text-indigo-100 mt-2 text-base">Salt rounds, irreversible one-way password hashing, and duplicate email prevention</p>
+    </header>
+
+    <!-- Bcrypt Visualizer -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-8">
+      <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+        <i class="fa-solid fa-lock text-indigo-600"></i> Password Hashing Demonstration
+      </h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">Plain Text Password (Enter below)</label>
+          <input id="plain-pass" type="text" value="secretPassword123" oninput="simulateBcrypt()" class="w-full text-xs font-mono p-3 bg-slate-50 border border-slate-200 rounded-lg">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">Generated Bcrypt Hash (Salt Rounds: 10)</label>
+          <div id="hashed-out" class="p-3 bg-slate-900 text-emerald-400 font-mono text-xs rounded-lg break-all"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function simulateBcrypt() {
+      const pw = document.getElementById("plain-pass").value;
+      // Simulated visual representation of bcrypt hash
+      const randomSalt = Array.from({length: 22}, () => "abcdefghijklmnopqrstuvwxyz0123456789"[Math.floor(Math.random()*36)]).join("");
+      document.getElementById("hashed-out").textContent = `$2a$10$${randomSalt}...[irreversible_hash_of_${pw.length}_chars]`;
+    }
+    simulateBcrypt();
+  </script>
+</body>
+</html>
+

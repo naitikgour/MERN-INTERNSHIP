@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 6 - Day 3: Mongoose Models & Schemas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <header class="bg-gradient-to-r from-violet-600 to-purple-700 text-white rounded-2xl p-8 mb-8 shadow-lg">
+      <span class="inline-block bg-violet-500/30 text-violet-100 text-xs font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">
+        Week 6 • Day 3
+      </span>
+      <h1 class="text-3xl font-extrabold tracking-tight">Mongoose Models & Schemas</h1>
+      <p class="text-violet-100 mt-2 text-base">Schema definition, built-in validation, custom logger middleware, and REST CRUD API</p>
+    </header>
+
+    <!-- Schema Definition Viewer -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-code text-violet-600"></i> Schema Definition
+        </h3>
+        <pre class="bg-slate-900 text-purple-300 p-4 rounded-xl text-xs font-mono overflow-x-auto">
+const studentSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  age: { type: Number, required: true, min: 5, max: 80 },
+  department: { type: String, default: "General" },
+  createdAt: { type: Date, default: Date.now }
+});</pre>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-shield-halved text-emerald-600"></i> Active Validations
+        </h3>
+        <ul class="space-y-2 text-xs text-slate-600">
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> <b>required:</b> name, age</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> <b>min: 5:</b> enforces minimum age</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> <b>max: 80:</b> enforces maximum age</li>
+          <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> <b>default:</b> "General" if department omitted</li>
+        </ul>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-route text-blue-600"></i> API Endpoints
+        </h3>
+        <div class="space-y-1.5 text-xs font-mono">
+          <div class="p-1.5 bg-blue-50 text-blue-700 rounded"><span class="font-bold">GET</span> /students</div>
+          <div class="p-1.5 bg-blue-50 text-blue-700 rounded"><span class="font-bold">GET</span> /students/:id</div>
+          <div class="p-1.5 bg-emerald-50 text-emerald-700 rounded"><span class="font-bold">POST</span> /students</div>
+          <div class="p-1.5 bg-amber-50 text-amber-700 rounded"><span class="font-bold">PUT</span> /students/:id</div>
+          <div class="p-1.5 bg-rose-50 text-rose-700 rounded"><span class="font-bold">DELETE</span> /students/:id</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Interactive CRUD Panel -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+      <h2 class="text-xl font-bold text-slate-900 mb-4">Live Students API Sandbox</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Form -->
+        <div>
+          <h4 class="font-semibold text-sm mb-3 text-slate-700">Add New Student</h4>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">Name</label>
+              <input id="stu-name" type="text" placeholder="e.g. John Doe" class="w-full text-xs p-2.5 border rounded-lg">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">Age (5 - 80)</label>
+              <input id="stu-age" type="number" placeholder="21" class="w-full text-xs p-2.5 border rounded-lg">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">Department</label>
+              <input id="stu-dept" type="text" placeholder="Computer Science" class="w-full text-xs p-2.5 border rounded-lg">
+            </div>
+            <button onclick="addStudent()" class="w-full py-2 bg-violet-600 hover:bg-violet-700 text-white font-semibold text-xs rounded-lg">
+              POST /students (Create)
+            </button>
+          </div>
+        </div>
+
+        <!-- Student List -->
+        <div>
+          <h4 class="font-semibold text-sm mb-3 text-slate-700">Active Students Record</h4>
+          <div id="student-list" class="space-y-2 max-h-72 overflow-y-auto"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let students = [
+      { _id: "65f8001", name: "Amit Sharma", age: 22, department: "Computer Science" },
+      { _id: "65f8002", name: "Riya Verma", age: 20, department: "Information Technology" },
+      { _id: "65f8003", name: "Rahul Patel", age: 24, department: "Management" }
+    ];
+
+    function renderList() {
+      const container = document.getElementById("student-list");
+      container.innerHTML = "";
+      students.forEach(s => {
+        const item = document.createElement("div");
+        item.className = "p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between text-xs";
+        item.innerHTML = `
+          <div>
+            <div class="font-bold text-slate-900">${s.name} <span class="text-slate-400 font-mono font-normal">(${s._id})</span></div>
+            <div class="text-slate-500">Age: ${s.age} | Dept: ${s.department}</div>
+          </div>
+          <button onclick="deleteStudent('${s._id}')" class="text-rose-600 hover:text-rose-800 font-semibold">Delete</button>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function addStudent() {
+      const name = document.getElementById("stu-name").value;
+      const age = Number(document.getElementById("stu-age").value);
+      const department = document.getElementById("stu-dept").value || "General";
+
+      if (!name || isNaN(age)) {
+        alert("Name and valid Age are required!");
+        return;
+      }
+      if (age < 5 || age > 80) {
+        alert("Validation error: Age must be between 5 and 80");
+        return;
+      }
+
+      students.push({
+        _id: "65f8" + (students.length + 10).toString(16),
+        name,
+        age,
+        department
+      });
+
+      document.getElementById("stu-name").value = "";
+      document.getElementById("stu-age").value = "";
+      document.getElementById("stu-dept").value = "";
+      renderList();
+    }
+
+    function deleteStudent(id) {
+      students = students.filter(s => s._id !== id);
+      renderList();
+    }
+
+    renderList();
+  </script>
+</body>
+</html>
+

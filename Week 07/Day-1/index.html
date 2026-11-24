@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 7 - Day 1: Introduction to Authentication & Authorization</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <header class="bg-gradient-to-r from-amber-500 via-orange-600 to-red-600 text-white rounded-2xl p-8 mb-8 shadow-xl">
+      <span class="inline-block bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">
+        Week 7 • Day 1
+      </span>
+      <h1 class="text-3xl font-extrabold tracking-tight">Authentication & Authorization</h1>
+      <p class="text-orange-100 mt-2 text-base">Cookies vs Sessions vs Tokens, JSON Web Token (JWT) Anatomy, and Tampering Detection</p>
+    </header>
+
+    <!-- Comparison Table -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <h3 class="font-bold text-slate-900 text-base mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-key text-amber-600"></i> Authentication
+        </h3>
+        <p class="text-xs text-slate-500 mb-3"><b>"Who are you?"</b> Verifying user identity before granting system access.</p>
+        <div class="p-3 bg-amber-50 border border-amber-100 rounded-xl text-xs space-y-1">
+          <div>• Password & Email verification</div>
+          <div>• Multi-Factor Authentication (OTP, SMS)</div>
+          <div>• Social logins (Google, GitHub OAuth)</div>
+        </div>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <h3 class="font-bold text-slate-900 text-base mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-id-card-clip text-orange-600"></i> Authorization
+        </h3>
+        <p class="text-xs text-slate-500 mb-3"><b>"What can you do?"</b> Granting or denying access to specific resources based on role.</p>
+        <div class="p-3 bg-orange-50 border border-orange-100 rounded-xl text-xs space-y-1">
+          <div>• Admin can access /admin panel & delete users</div>
+          <div>• Regular users can only edit their own profile</div>
+          <div>• Role-based access control (RBAC)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live JWT Inspector -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-8">
+      <h3 class="font-bold text-slate-900 text-lg mb-4 flex items-center gap-2">
+        <i class="fa-solid fa-cube text-red-600"></i> Interactive JWT Inspector & Tamper Simulator
+      </h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <!-- Header -->
+        <div class="border rounded-xl p-4 bg-rose-50/50 border-rose-200">
+          <span class="text-xs font-bold text-rose-700 uppercase">1. Header (Algorithm & Token Type)</span>
+          <pre id="jwt-header" class="text-xs font-mono text-rose-900 mt-2 bg-white p-3 rounded-lg border border-rose-100"></pre>
+        </div>
+        <!-- Payload -->
+        <div class="border rounded-xl p-4 bg-purple-50/50 border-purple-200">
+          <span class="text-xs font-bold text-purple-700 uppercase">2. Payload (User Claims)</span>
+          <textarea id="jwt-payload" rows="5" oninput="updateSignatureCheck()" class="w-full text-xs font-mono text-purple-900 mt-2 p-2 bg-white rounded-lg border border-purple-200 focus:outline-none"></textarea>
+        </div>
+        <!-- Signature -->
+        <div class="border rounded-xl p-4 bg-cyan-50/50 border-cyan-200">
+          <span class="text-xs font-bold text-cyan-700 uppercase">3. Verify Signature</span>
+          <div id="sig-status" class="mt-2 p-3 bg-emerald-100 text-emerald-800 rounded-lg text-xs font-bold font-mono">
+            ✔ SIGNATURE VERIFIED
+          </div>
+          <p class="text-[11px] text-slate-500 mt-2">Modify the payload in the middle box to observe how tampering invalidates the cryptographic signature immediately!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const headerObj = { alg: "HS256", typ: "JWT" };
+    let initialPayload = JSON.stringify({ id: 101, name: "Aman Verma", role: "user" }, null, 2);
+
+    document.getElementById("jwt-header").textContent = JSON.stringify(headerObj, null, 2);
+    document.getElementById("jwt-payload").value = initialPayload;
+
+    function updateSignatureCheck() {
+      const current = document.getElementById("jwt-payload").value;
+      const statusBox = document.getElementById("sig-status");
+
+      if (current.trim() === initialPayload.trim()) {
+        statusBox.className = "mt-2 p-3 bg-emerald-100 text-emerald-800 rounded-lg text-xs font-bold font-mono";
+        statusBox.textContent = "✔ SIGNATURE VERIFIED";
+      } else {
+        statusBox.className = "mt-2 p-3 bg-rose-100 text-rose-800 rounded-lg text-xs font-bold font-mono";
+        statusBox.textContent = "❌ INVALID SIGNATURE (TAMPERED!)";
+      }
+    }
+  </script>
+</body>
+</html>
+

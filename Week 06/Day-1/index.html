@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 6 - Day 1: Introduction to Databases & MongoDB</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-2xl p-8 mb-8 shadow-lg">
+      <div class="flex items-center justify-between">
+        <div>
+          <span class="inline-block bg-emerald-500/30 text-emerald-100 text-xs font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">
+            Week 6 • Day 1
+          </span>
+          <h1 class="text-3xl font-extrabold tracking-tight">Introduction to Databases & MongoDB</h1>
+          <p class="text-emerald-100 mt-2 text-base">NoSQL concepts, BSON vs JSON, and interactive MongoDB CRUD operations</p>
+        </div>
+        <div class="hidden sm:block text-5xl opacity-80">
+          <i class="fa-solid fa-database"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- Concepts Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <!-- SQL vs NoSQL -->
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+        <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-code-compare text-emerald-600"></i> SQL vs NoSQL
+        </h2>
+        <div class="space-y-3 text-sm">
+          <div class="p-3 bg-blue-50 border border-blue-100 rounded-lg">
+            <span class="font-bold text-blue-900">SQL (Relational):</span> Table-based with strict schema, rows & columns (MySQL, PostgreSQL, Oracle). Uses SQL queries.
+          </div>
+          <div class="p-3 bg-emerald-50 border border-emerald-100 rounded-lg">
+            <span class="font-bold text-emerald-900">NoSQL (Document-based):</span> Flexible schema, stores JSON/BSON documents in collections (MongoDB, Firebase). High scalability and performance.
+          </div>
+        </div>
+      </div>
+
+      <!-- JSON vs BSON -->
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+        <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-file-code text-teal-600"></i> JSON vs BSON
+        </h2>
+        <div class="space-y-3 text-sm">
+          <div class="p-3 bg-amber-50 border border-amber-100 rounded-lg">
+            <span class="font-bold text-amber-900">JSON (JavaScript Object Notation):</span> Human-readable text format used in APIs and client-server communication.
+          </div>
+          <div class="p-3 bg-purple-50 border border-purple-100 rounded-lg">
+            <span class="font-bold text-purple-900">BSON (Binary JSON):</span> Binary-encoded serialization format used internally by MongoDB for fast traversals, indexing, and rich datatypes (ObjectId, Date, Binary).
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Interactive Collection Explorer -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-8">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-slate-100">
+        <div>
+          <h2 class="text-2xl font-bold text-slate-900">University_Programs Collection</h2>
+          <p class="text-slate-500 text-sm">Interactive MongoDB CRUD Operations Simulation</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="runFilter('all')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700">All Programs</button>
+          <button onclick="runFilter('IT_CS')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100">IT & CS</button>
+          <button onclick="runFilter('Management')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100">Management</button>
+          <button onclick="runFilter('Agriculture')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-50 text-amber-700 hover:bg-amber-100">Agriculture</button>
+          <button onclick="resetData()" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-white hover:bg-slate-700">Reset Initial Data</button>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+        <button onclick="addProgramModal()" class="p-3 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl text-emerald-800 font-semibold text-sm flex items-center justify-center gap-2">
+          <i class="fa-solid fa-plus-circle"></i> Insert One
+        </button>
+        <button onclick="updateDCA()" class="p-3 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl text-blue-800 font-semibold text-sm flex items-center justify-center gap-2">
+          <i class="fa-solid fa-pen-to-square"></i> Update DCA Fee
+        </button>
+        <button onclick="updateITFees()" class="p-3 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-xl text-purple-800 font-semibold text-sm flex items-center justify-center gap-2">
+          <i class="fa-solid fa-layer-group"></i> Update Many (IT_CS)
+        </button>
+        <button onclick="deleteAgri()" class="p-3 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-xl text-rose-800 font-semibold text-sm flex items-center justify-center gap-2">
+          <i class="fa-solid fa-trash-can"></i> Delete Many (Agri)
+        </button>
+      </div>
+
+      <!-- Table View -->
+      <div class="overflow-x-auto rounded-xl border border-slate-200">
+        <table class="w-full text-left text-sm text-slate-700">
+          <thead class="bg-slate-50 text-xs font-semibold uppercase text-slate-500 border-b border-slate-200">
+            <tr>
+              <th class="px-6 py-3">_id (ObjectId)</th>
+              <th class="px-6 py-3">Program Name</th>
+              <th class="px-6 py-3">Department</th>
+              <th class="px-6 py-3">Fee (INR)</th>
+              <th class="px-6 py-3 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="programs-body" class="divide-y divide-slate-100 font-mono text-xs">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Query Log Console -->
+      <div class="mt-6">
+        <h3 class="text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
+          <i class="fa-solid fa-terminal text-slate-600"></i> Query Execution Log
+        </h3>
+        <div id="query-log" class="bg-slate-900 text-emerald-400 p-4 rounded-xl font-mono text-xs max-h-48 overflow-y-auto space-y-1">
+          <div>> db.University_Programs.find() initialized.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const initialPrograms = [
+      { _id: "65fa01a01", Program_Name: "MCA", Department: "IT_CS", Fee: 65000 },
+      { _id: "65fa01a02", Program_Name: "BCA", Department: "IT_CS", Fee: 55000 },
+      { _id: "65fa01a03", Program_Name: "DCA", Department: "IT_CS", Fee: 10000 },
+      { _id: "65fa01a04", Program_Name: "B.Tech CS", Department: "IT_CS", Fee: 75000 },
+      { _id: "65fa01a05", Program_Name: "M.Tech CS", Department: "IT_CS", Fee: 90000 },
+      { _id: "65fa01a06", Program_Name: "Cyber Security Diploma", Department: "IT_CS", Fee: 45000 },
+      { _id: "65fa01a07", Program_Name: "Data Science Certification", Department: "IT_CS", Fee: 35000 },
+      { _id: "65fa01a08", Program_Name: "MBA", Department: "Management", Fee: 85000 },
+      { _id: "65fa01a09", Program_Name: "BBA", Department: "Management", Fee: 60000 },
+      { _id: "65fa01a10", Program_Name: "Business Analytics PG", Department: "Management", Fee: 95000 },
+      { _id: "65fa01a11", Program_Name: "Hotel Management Diploma", Department: "Management", Fee: 40000 },
+      { _id: "65fa01a12", Program_Name: "B.Sc Agriculture", Department: "Agriculture", Fee: 70000 },
+      { _id: "65fa01a13", Program_Name: "M.Sc Agriculture", Department: "Agriculture", Fee: 95000 },
+      { _id: "65fa01a14", Program_Name: "Organic Farming Diploma", Department: "Agriculture", Fee: 30000 },
+      { _id: "65fa01a15", Program_Name: "Agriculture Marketing Certificate", Department: "Agriculture", Fee: 25000 }
+    ];
+
+    let programs = JSON.parse(JSON.stringify(initialPrograms));
+    let activeFilter = 'all';
+
+    function logQuery(cmd) {
+      const log = document.getElementById("query-log");
+      const entry = document.createElement("div");
+      entry.textContent = `> ${cmd}`;
+      log.appendChild(entry);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById("programs-body");
+      tbody.innerHTML = "";
+      const filtered = activeFilter === 'all' ? programs : programs.filter(p => p.Department === activeFilter);
+      
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-6 text-center text-slate-400">No documents found matching filter.</td></tr>`;
+        return;
+      }
+
+      filtered.forEach(p => {
+        const badgeColor = p.Department === 'IT_CS' ? 'bg-blue-100 text-blue-700' : p.Department === 'Management' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700';
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-50 transition";
+        tr.innerHTML = `
+          <td class="px-6 py-3 text-slate-400">${p._id}</td>
+          <td class="px-6 py-3 font-semibold text-slate-900">${p.Program_Name}</td>
+          <td class="px-6 py-3"><span class="px-2 py-0.5 rounded-full ${badgeColor}">${p.Department}</span></td>
+          <td class="px-6 py-3 font-bold text-slate-700">₹${Number(p.Fee).toLocaleString()}</td>
+          <td class="px-6 py-3 text-right">
+            <button onclick="deleteSingle('${p._id}', '${p.Program_Name}')" class="text-rose-600 hover:text-rose-800 font-sans font-medium text-xs">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function runFilter(dept) {
+      activeFilter = dept;
+      logQuery(`db.University_Programs.find(${dept === 'all' ? '{}' : `{ Department: "${dept}" }`})`);
+      renderTable();
+    }
+
+    function addProgramModal() {
+      const name = prompt("Enter Program Name:", "AI & Machine Learning");
+      if (!name) return;
+      const dept = prompt("Enter Department (IT_CS, Management, Agriculture):", "IT_CS") || "IT_CS";
+      const fee = prompt("Enter Fee:", "80000") || "80000";
+      const newDoc = {
+        _id: "65fa01a" + (programs.length + 10).toString(16),
+        Program_Name: name,
+        Department: dept,
+        Fee: Number(fee)
+      };
+      programs.push(newDoc);
+      logQuery(`db.University_Programs.insertOne({ Program_Name: "${name}", Department: "${dept}", Fee: "${fee}" })`);
+      renderTable();
+    }
+
+    function updateDCA() {
+      const dca = programs.find(p => p.Program_Name === "DCA");
+      if (dca) {
+        dca.Fee = 12000;
+        logQuery(`db.University_Programs.updateOne({ Program_Name: "DCA" }, { $set: { Fee: "12000" } })`);
+        renderTable();
+      } else {
+        alert("DCA document not found.");
+      }
+    }
+
+    function updateITFees() {
+      programs.forEach(p => {
+        if (p.Department === "IT_CS") p.Fee = 75000;
+      });
+      logQuery(`db.University_Programs.updateMany({ Department: "IT_CS" }, { $set: { Fee: "75000" } })`);
+      renderTable();
+    }
+
+    function deleteAgri() {
+      programs = programs.filter(p => p.Department !== "Agriculture");
+      logQuery(`db.University_Programs.deleteMany({ Department: "Agriculture" })`);
+      renderTable();
+    }
+
+    function deleteSingle(id, name) {
+      programs = programs.filter(p => p._id !== id);
+      logQuery(`db.University_Programs.deleteOne({ _id: ObjectId("${id}") }) // Deleted ${name}`);
+      renderTable();
+    }
+
+    function resetData() {
+      programs = JSON.parse(JSON.stringify(initialPrograms));
+      logQuery(`// Database reset to 15 initial documents`);
+      renderTable();
+    }
+
+    renderTable();
+  </script>
+</body>
+</html>
+

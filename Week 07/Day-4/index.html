@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 7 - Day 4: Protected Routes & Auth Middleware</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+  <div class="max-w-5xl mx-auto px-4 py-8">
+    <header class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-2xl p-8 mb-8 shadow-xl">
+      <span class="inline-block bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">
+        Week 7 • Day 4
+      </span>
+      <h1 class="text-3xl font-extrabold tracking-tight">Protected Routes & Auth Middleware</h1>
+      <p class="text-emerald-100 mt-2 text-base">JWT Bearer verification, request hydration (req.user), and role-based authorization guards</p>
+    </header>
+
+    <!-- RBAC Matrix -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-8">
+      <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
+        <i class="fa-solid fa-table-cells text-emerald-600"></i> Role-Based Access Control (RBAC) Matrix
+      </h3>
+      <table class="w-full text-xs text-left">
+        <thead class="bg-slate-50 uppercase text-slate-500 font-bold border-b">
+          <tr>
+            <th class="p-3">Route Endpoint</th>
+            <th class="p-3">Middleware</th>
+            <th class="p-3">Guest (No Token)</th>
+            <th class="p-3">User Token</th>
+            <th class="p-3">Admin Token</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y font-mono">
+          <tr>
+            <td class="p-3 font-bold text-slate-800">GET /api/users</td>
+            <td class="p-3 text-blue-600">protect</td>
+            <td class="p-3 text-rose-600">401 Unauthorized</td>
+            <td class="p-3 text-emerald-600 font-bold">200 OK</td>
+            <td class="p-3 text-emerald-600 font-bold">200 OK</td>
+          </tr>
+          <tr>
+            <td class="p-3 font-bold text-slate-800">GET /api/admin/users</td>
+            <td class="p-3 text-purple-600">protect, authorize("admin")</td>
+            <td class="p-3 text-rose-600">401 Unauthorized</td>
+            <td class="p-3 text-amber-600 font-bold">403 Forbidden</td>
+            <td class="p-3 text-emerald-600 font-bold">200 OK</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
+

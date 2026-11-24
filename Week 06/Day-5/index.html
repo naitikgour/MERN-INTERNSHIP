@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 6 - Day 5: Data Validation & Relationships</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <header class="bg-gradient-to-r from-teal-600 to-emerald-700 text-white rounded-2xl p-8 mb-8 shadow-lg">
+      <span class="inline-block bg-teal-500/30 text-teal-100 text-xs font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">
+        Week 6 • Day 5
+      </span>
+      <h1 class="text-3xl font-extrabold tracking-tight">Data Validation & Relationships</h1>
+      <p class="text-teal-100 mt-2 text-base">Mongoose schema validators, custom regex, ObjectId referencing, and .populate()</p>
+    </header>
+
+    <!-- Visual Architecture: Embedding vs Referencing -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-bold text-slate-900 text-sm">Option 1: Embedding (Subdocuments)</h3>
+          <span class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-mono">addresses: [...]</span>
+        </div>
+        <p class="text-xs text-slate-500 mb-3">Store nested data inside the parent document. Best for fast 1-to-few reads (e.g. user delivery addresses).</p>
+        <pre class="bg-slate-900 text-emerald-400 p-3 rounded-xl text-xs font-mono">{
+  name: "Rahul",
+  addresses: [{ street: "MG Road", city: "Delhi", pin: 110001 }]
+}</pre>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-bold text-slate-900 text-sm">Option 2: Referencing (Best Practice)</h3>
+          <span class="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded font-mono">ref: "User"</span>
+        </div>
+        <p class="text-xs text-slate-500 mb-3">Store separate collections linked by ObjectId. Use <code>.populate("user")</code> to join without data duplication.</p>
+        <pre class="bg-slate-900 text-teal-300 p-3 rounded-xl text-xs font-mono">{
+  productName: "Laptop",
+  amount: 45000,
+  user: ObjectId("65fa9d01") // Normalized Link
+}</pre>
+      </div>
+    </div>
+
+    <!-- Live Populate Explorer -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="font-bold text-slate-900 text-lg">Live Orders & Populated Users</h3>
+          <p class="text-xs text-slate-500">Demonstrating <code>Order.find().populate("user", "name email role")</code></p>
+        </div>
+        <button onclick="renderOrders()" class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-semibold hover:bg-emerald-700">
+          Refresh Orders
+        </button>
+      </div>
+
+      <div class="overflow-x-auto rounded-xl border border-slate-200">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-50 font-bold uppercase text-slate-500 border-b">
+            <tr>
+              <th class="px-6 py-3">Order ID</th>
+              <th class="px-6 py-3">Product Name</th>
+              <th class="px-6 py-3">Amount</th>
+              <th class="px-6 py-3">Populated User Details (Joined)</th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const users = [
+      { _id: "65fb0001", name: "Rahul Sharma", email: "rahul@example.com", role: "Customer" },
+      { _id: "65fb0002", name: "Pooja Patel", email: "pooja@example.com", role: "Admin" },
+    ];
+
+    const orders = [
+      { _id: "ord_101", productName: "Laptop ThinkPad", amount: 65000, user: "65fb0001" },
+      { _id: "ord_102", productName: "Wireless Keyboard", amount: 2500, user: "65fb0001" },
+      { _id: "ord_103", productName: "4K Monitor 27-inch", amount: 28000, user: "65fb0002" }
+    ];
+
+    function renderOrders() {
+      const tbody = document.getElementById("orders-tbody");
+      tbody.innerHTML = "";
+      orders.forEach(o => {
+        const u = users.find(x => x._id === o.user);
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-50";
+        tr.innerHTML = `
+          <td class="px-6 py-3 font-mono text-slate-400">${o._id}</td>
+          <td class="px-6 py-3 font-bold text-slate-800">${o.productName}</td>
+          <td class="px-6 py-3 font-bold text-emerald-600">₹${o.amount.toLocaleString()}</td>
+          <td class="px-6 py-3">
+            <div class="p-2 bg-emerald-50 border border-emerald-100 rounded-lg inline-block">
+              <span class="font-bold text-emerald-950">${u.name}</span>
+              <span class="text-emerald-700">(${u.email})</span>
+              <span class="text-[10px] bg-emerald-200 text-emerald-800 px-1.5 py-0.5 rounded ml-1 font-semibold">${u.role}</span>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    renderOrders();
+  </script>
+</body>
+</html>
+

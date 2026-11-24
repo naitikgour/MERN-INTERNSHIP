@@ -1,0 +1,16 @@
+{
+  "name": "week-6-day-4-advanced-crud",
+  "version": "1.0.0",
+  "description": "MongoDB Query Operators, Pagination, Sorting, and Search",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test-queries.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.3.4"
+  }
+}
+

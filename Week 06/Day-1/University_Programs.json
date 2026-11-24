@@ -1,0 +1,18 @@
+[
+  { "Program_Name": "MCA", "Department": "IT_CS", "Fee": 65000 },
+  { "Program_Name": "BCA", "Department": "IT_CS", "Fee": 55000 },
+  { "Program_Name": "DCA", "Department": "IT_CS", "Fee": 10000 },
+  { "Program_Name": "B.Tech CS", "Department": "IT_CS", "Fee": 75000 },
+  { "Program_Name": "M.Tech CS", "Department": "IT_CS", "Fee": 90000 },
+  { "Program_Name": "Cyber Security Diploma", "Department": "IT_CS", "Fee": 45000 },
+  { "Program_Name": "Data Science Certification", "Department": "IT_CS", "Fee": 35000 },
+  { "Program_Name": "MBA", "Department": "Management", "Fee": 85000 },
+  { "Program_Name": "BBA", "Department": "Management", "Fee": 60000 },
+  { "Program_Name": "Business Analytics PG", "Department": "Management", "Fee": 95000 },
+  { "Program_Name": "Hotel Management Diploma", "Department": "Management", "Fee": 40000 },
+  { "Program_Name": "B.Sc Agriculture", "Department": "Agriculture", "Fee": 70000 },
+  { "Program_Name": "M.Sc Agriculture", "Department": "Agriculture", "Fee": 95000 },
+  { "Program_Name": "Organic Farming Diploma", "Department": "Agriculture", "Fee": 30000 },
+  { "Program_Name": "Agriculture Marketing Certificate", "Department": "Agriculture", "Fee": 25000 }
+]
+

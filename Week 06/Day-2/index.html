@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 6 - Day 2: Connecting Node.js to MongoDB</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+  <div class="max-w-5xl mx-auto px-4 py-8">
+    <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-2xl p-8 mb-8 shadow-lg">
+      <span class="inline-block bg-blue-500/30 text-blue-100 text-xs font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">
+        Week 6 • Day 2
+      </span>
+      <h1 class="text-3xl font-extrabold tracking-tight">Connecting Node.js to MongoDB</h1>
+      <p class="text-blue-100 mt-2 text-base">Mongoose ODM setup, .env variable management, and asynchronous promise error handling</p>
+    </header>
+
+    <!-- Architecture & Connection Flow -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-8">
+      <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+        <i class="fa-solid fa-network-wired text-blue-600"></i> Connection Architecture
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <i class="fa-brands fa-node-js text-3xl text-emerald-600 mb-2"></i>
+          <h3 class="font-bold text-slate-900">1. Node.js + Express</h3>
+          <p class="text-xs text-slate-500 mt-1">App loads .env variables using dotenv and creates web server.</p>
+        </div>
+        <div class="p-4 bg-blue-50 border border-blue-200 rounded-xl">
+          <i class="fa-solid fa-plug text-3xl text-blue-600 mb-2"></i>
+          <h3 class="font-bold text-blue-900">2. Mongoose ODM</h3>
+          <p class="text-xs text-blue-700 mt-1">Connects asynchronously with connection pool, schemas & promises.</p>
+        </div>
+        <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
+          <i class="fa-solid fa-leaf text-3xl text-emerald-600 mb-2"></i>
+          <h3 class="font-bold text-emerald-900">3. MongoDB Atlas</h3>
+          <p class="text-xs text-emerald-700 mt-1">Cloud MongoDB cluster receiving queries securely via TLS URI.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Connection Simulator -->
+    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-8">
+      <h2 class="text-xl font-bold text-slate-900 mb-4">Interactive Connection Test Simulator</h2>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Simulated MONGO_URI</label>
+          <input id="uri-input" type="text" value="mongodb+srv://admin:securePass123@cluster0.mongodb.net/university_db" class="w-full text-xs font-mono p-3 bg-slate-50 border border-slate-200 rounded-lg">
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <button onclick="testSimulatedConnection(true)" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-lg flex items-center gap-2">
+            <i class="fa-solid fa-circle-check"></i> Test Success Scenario
+          </button>
+          <button onclick="testSimulatedConnection(false, 'BadAuth')" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs rounded-lg flex items-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation"></i> Simulate Auth Failure
+          </button>
+          <button onclick="testSimulatedConnection(false, 'IPBlock')" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs rounded-lg flex items-center gap-2">
+            <i class="fa-solid fa-shield-halved"></i> Simulate IP Whitelist Error
+          </button>
+        </div>
+
+        <div id="status-box" class="p-4 rounded-xl border font-mono text-xs hidden"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function testSimulatedConnection(success, reason) {
+      const box = document.getElementById("status-box");
+      box.classList.remove("hidden", "bg-emerald-50", "border-emerald-200", "text-emerald-800", "bg-rose-50", "border-rose-200", "text-rose-800", "bg-amber-50", "border-amber-200", "text-amber-800");
+
+      if (success) {
+        box.classList.add("bg-emerald-50", "border-emerald-200", "text-emerald-800");
+        box.innerHTML = `
+          <div class="font-bold mb-1">✔ Connection Promise Resolved</div>
+          <div>[Mongoose] Connected to MongoDB Atlas cluster successfully 🚀</div>
+          <div>[Server] Ready to accept incoming queries on port 5000.</div>
+        `;
+      } else if (reason === 'BadAuth') {
+        box.classList.add("bg-rose-50", "border-rose-200", "text-rose-800");
+        box.innerHTML = `
+          <div class="font-bold mb-1">❌ MongoDB Connection Error (AuthenticationFailed)</div>
+          <div>Error: bad auth : authentication failed</div>
+          <div>Solution: Check username and password in .env file.</div>
+        `;
+      } else {
+        box.classList.add("bg-amber-50", "border-amber-200", "text-amber-800");
+        box.innerHTML = `
+          <div class="font-bold mb-1">⚠ MongoServerSelectionError</div>
+          <div>Error: Server selection timed out after 30000 ms</div>
+          <div>Solution: Ensure IP is whitelisted (0.0.0.0/0) in MongoDB Atlas Network Access.</div>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
+
